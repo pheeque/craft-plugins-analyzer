@@ -13,5 +13,8 @@
             "email": "contact@pheeque.com"
         }
     ],
-    "require": {}
+    "require": {
+        "guzzlehttp/guzzle": "^7.4",
+        "symfony/console": "^6.0"
+    }
 }

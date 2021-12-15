@@ -1,0 +1,16 @@
+#!/usr/bin/env php
+<?php
+
+use Pheeque\CraftPluginsAnalyzer\Commands\ListPlugins;
+use Symfony\Component\Console\Application;
+
+require __DIR__ . '/../vendor/autoload.php';
+
+$application = new Application();
+
+$listPluginsCommand = new ListPlugins();
+$application->add($listPluginsCommand);
+
+$application->setDefaultCommand($listPluginsCommand->getName());
+
+$application->run();
