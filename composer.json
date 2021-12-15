@@ -1,0 +1,17 @@
+{
+    "name": "pheeque/craft-plugins-analyzer",
+    "description": "Tool to analyze data about available Craft plugins",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Pheeque\\CraftPluginsAnalyzer\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Rafik",
+            "email": "contact@pheeque.com"
+        }
+    ],
+    "require": {}
+}
