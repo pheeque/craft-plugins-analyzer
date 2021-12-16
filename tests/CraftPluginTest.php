@@ -28,7 +28,7 @@ it('hydrates plugin from cache', function () {
         "avatax",
         "https://github.com/abryrath/craft-avatax",
         "",
-        "",
+        "dev-master",
         5,
         0,
         0,

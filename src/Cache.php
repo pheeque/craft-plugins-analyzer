@@ -65,7 +65,6 @@ class Cache {
                 // 'testLibrary' => $composerData['testLibrary'],
                 'testLibrary' => '',
                 'version' => $firstVersion['version'],
-                'version' => '',
                 'downloads' => $composerData['downloads']['total'],
                 'dependents' => $composerData['dependents'],
                 'favers' => $composerData['favers'],
