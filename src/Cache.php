@@ -6,6 +6,8 @@ use GuzzleHttp\ClientInterface;
 
 class Cache {
 
+    private int $lastChecked;
+
     private array $items;
 
     private string $cacheFilename;
@@ -17,6 +19,8 @@ class Cache {
         $this->httpClient = $client;
 
         $this->items = [];
+
+        $this->lastChecked = 10000 * time();
     }
 
     public function load(string $filename) : void
@@ -24,14 +28,26 @@ class Cache {
         $this->cacheFilename = $filename;
 
         if (file_exists($this->cacheFilename)) {
-            $this->items = json_decode(file_get_contents($this->cacheFilename), true);
+            $data = json_decode(file_get_contents($this->cacheFilename), true);
+
+            if (isset($data['items'])) {
+                $this->items = $data['items'];
+            }
+            if (isset($data['lastChecked'])) {
+                $this->lastChecked = $data['lastChecked'];
+            }
+
+            $this->validateCacheData();
         }
     }
 
     public function save()
     {
         if ($this->persist) {
-            file_put_contents($this->cacheFilename, json_encode($this->items));
+            file_put_contents($this->cacheFilename, json_encode([
+                'items' => $this->items,
+                'lastChecked' => $this->lastChecked,
+            ]));
         }
     }
 
@@ -74,6 +90,23 @@ class Cache {
         }
 
         return $this->items[$packageName];
+    }
+
+    /**
+     * Confirms from packagist what cached packages have updates.
+     */
+    public function validateCacheData()
+    {
+        $res = $this->httpClient->request('GET', 'https://packagist.org/metadata/changes.json?since=' . $this->lastChecked);
+        $data = json_decode($res->getBody(), true);
+
+        foreach($data['actions'] as $action) {
+            if (isset($this->items[$action['package']])) {
+                unset($this->items[$action['package']]);
+            }
+        }
+
+        $this->lastChecked = 10000 * time();
     }
 
     public function __destruct()
