@@ -7,6 +7,7 @@ use GuzzleHttp\ClientInterface;
 use Pheeque\CraftPluginsAnalyzer\Cache;
 use Pheeque\CraftPluginsAnalyzer\CraftPluginPackage;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -76,11 +77,16 @@ class ListPlugins extends Command {
 
     protected function execute(InputInterface $input, OutputInterface $output) : int
     {
+        $progressBar = new ProgressBar($output, 50);
+
         $res = $this->httpClient->request('GET', 'https://packagist.org/packages/list.json?type=craft-plugin');
 
         $data = json_decode($res->getBody());
 
         $packageNames = $data->packageNames;
+
+        $progressBar->setMaxSteps(count($packageNames));
+
         $packages = [];
         foreach ($packageNames as $name) {
             $package = new CraftPluginPackage($name);
@@ -90,7 +96,11 @@ class ListPlugins extends Command {
             if ($package->handle || ! $package->isAbandoned()) {
                 $packages[] = $package;
             }
+
+            $progressBar->advance();
         }
+
+        $progressBar->finish();
 
         //order
         $order = $input->getOption('order');
@@ -112,9 +122,9 @@ class ListPlugins extends Command {
             };
 
             if ($order == 'DESC') {
-                return $orderValues[0] < $orderValues[1];
+                return $orderValues[0] < $orderValues[1] ? -1 : 1;
             } else {
-                return $orderValues[0] > $orderValues[1];
+                return $orderValues[0] > $orderValues[1] ? -1 : 1;
             }
         });
 
@@ -137,6 +147,8 @@ class ListPlugins extends Command {
                 'Favers',
                 'Updated',
             ])->setRows(array_map(fn (CraftPluginPackage $package) => $package->toArray(), $packages));
+
+            $output->writeln('');
             $table->render();
         } else {
             //save to file
