@@ -1,6 +1,7 @@
 {
     "name": "pheeque/craft-plugins-analyzer",
     "description": "Tool to analyze data about available Craft plugins",
+    "homepage": "https://github.com/pheeque/craft-plugins-analyzer",
     "license": "MIT",
     "autoload": {
         "psr-4": {
@@ -16,5 +17,15 @@
     "require": {
         "guzzlehttp/guzzle": "^7.4",
         "symfony/console": "^6.0"
-    }
+    },
+    "bin": [
+        "bin/craft-plugins-analyzer"
+    ],
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
