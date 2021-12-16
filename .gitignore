@@ -1,1 +1,4 @@
 /vendor
+cache.json
+test-cache.json
+.phpunit.result.cache

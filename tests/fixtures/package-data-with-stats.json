@@ -1,0 +1,153 @@
+{
+    "package": {
+        "name": "24hoursmedia-craftcms\/twig-works-image",
+        "description": "Twig image transforms for CraftCMS 3.",
+        "time": "2018-03-27T07:12:02+00:00",
+        "maintainers": [
+            {
+                "name": "24hoursmedia-craftcms",
+                "avatar_url": "https:\/\/www.gravatar.com\/avatar\/370a1ea72dd73400f8e1899525a8c504?d=identicon"
+            }
+        ],
+        "versions": {
+            "dev-master": {
+                "name": "24hoursmedia-craftcms\/twig-works-image",
+                "description": "Twig image transforms for CraftCMS 3.",
+                "keywords": [
+                    "image",
+                    "twig",
+                    "cms",
+                    "Craft",
+                    "craftcms",
+                    "craft-plugin",
+                    "twigworksimage"
+                ],
+                "homepage": "",
+                "version": "dev-master",
+                "version_normalized": "dev-master",
+                "license": [
+                    "proprietary"
+                ],
+                "authors": [
+                    {
+                        "name": "24HOURSMEDIA",
+                        "homepage": "http:\/\/www.24hoursmedia.com"
+                    }
+                ],
+                "source": {
+                    "type": "git",
+                    "url": "https:\/\/github.com\/24hoursmedia-craftcms\/twig-works-image.git",
+                    "reference": "3e1eead922d99d6bff064106bf2502b327f47c73"
+                },
+                "dist": {
+                    "type": "zip",
+                    "url": "https:\/\/api.github.com\/repos\/24hoursmedia-craftcms\/twig-works-image\/zipball\/3e1eead922d99d6bff064106bf2502b327f47c73",
+                    "reference": "3e1eead922d99d6bff064106bf2502b327f47c73",
+                    "shasum": ""
+                },
+                "type": "craft-plugin",
+                "support": {
+                    "docs": "https:\/\/github.com\/24hoursmedia-craftcms\/twig-works-image\/blob\/master\/README.md",
+                    "issues": "https:\/\/github.com\/24hoursmedia-craftcms\/twig-works-image\/issues",
+                    "source": "https:\/\/github.com\/24hoursmedia-craftcms\/twig-works-image\/tree\/v1.0.1"
+                },
+                "time": "2018-03-27T07:24:38+00:00",
+                "autoload": {
+                    "psr-4": {
+                        "twentyfourhoursmedia\\twigworksimage\\": "src\/"
+                    }
+                },
+                "extra": {
+                    "name": "TwigWorksImage",
+                    "handle": "twig-works-image",
+                    "hasCpSettings": true,
+                    "hasCpSection": false,
+                    "changelogUrl": "https:\/\/raw.githubusercontent.com\/t4hoursmedia-craftcms\/twig-works-image\/master\/CHANGELOG.md",
+                    "components": {
+                        "twigWorksImageService": "twentyfourhoursmedia\\twigworksimage\\services\\TwigWorksImageService"
+                    },
+                    "class": "twentyfourhoursmedia\\twigworksimage\\TwigWorksImage"
+                },
+                "default-branch": true,
+                "require": {
+                    "craftcms\/cms": "^3.0.0-RC1"
+                }
+            },
+            "1.0.0": {
+                "name": "24hoursmedia-craftcms\/twig-works-image",
+                "description": "twig image transforms..",
+                "keywords": [
+                    "cms",
+                    "Craft",
+                    "craftcms",
+                    "craft-plugin",
+                    "twigworksimage"
+                ],
+                "homepage": "",
+                "version": "1.0.0",
+                "version_normalized": "1.0.0.0",
+                "license": [
+                    "proprietary"
+                ],
+                "authors": [
+                    {
+                        "name": "24HOURSMEDIA",
+                        "homepage": "http:\/\/www.24hoursmedia.com"
+                    }
+                ],
+                "source": {
+                    "type": "git",
+                    "url": "https:\/\/github.com\/24hoursmedia-craftcms\/twig-works-image.git",
+                    "reference": "27a0d64cdaa4959070604e537f9cc1afcdb1482d"
+                },
+                "dist": {
+                    "type": "zip",
+                    "url": "https:\/\/api.github.com\/repos\/24hoursmedia-craftcms\/twig-works-image\/zipball\/27a0d64cdaa4959070604e537f9cc1afcdb1482d",
+                    "reference": "27a0d64cdaa4959070604e537f9cc1afcdb1482d",
+                    "shasum": ""
+                },
+                "type": "craft-plugin",
+                "support": {
+                    "docs": "https:\/\/github.com\/24hoursmedia-craftcms\/twig-works-image\/blob\/master\/README.md",
+                    "issues": "https:\/\/github.com\/24hoursmedia-craftcms\/twig-works-image\/issues",
+                    "source": "https:\/\/github.com\/24hoursmedia-craftcms\/twig-works-image\/tree\/v1.0.0"
+                },
+                "time": "2018-03-22T20:59:52+00:00",
+                "autoload": {
+                    "psr-4": {
+                        "twentyfourhoursmedia\\twigworksimage\\": "src\/"
+                    }
+                },
+                "extra": {
+                    "name": "TwigWorksImage",
+                    "handle": "twig-works-image",
+                    "hasCpSettings": true,
+                    "hasCpSection": false,
+                    "changelogUrl": "https:\/\/raw.githubusercontent.com\/24hoursmedia-craftcms\/twig-works-image\/master\/CHANGELOG.md",
+                    "components": {
+                        "twigWorksImageService": "twentyfourhoursmedia\\twigworksimage\\services\\TwigWorksImageService"
+                    },
+                    "class": "twentyfourhoursmedia\\twigworksimage\\TwigWorksImage"
+                },
+                "require": {
+                    "craftcms\/cms": "^3.0.0-RC1"
+                }
+            }
+        },
+        "type": "craft-plugin",
+        "repository": "https:\/\/github.com\/24hoursmedia-craftcms\/twig-works-image",
+        "github_stars": 0,
+        "github_watchers": 1,
+        "github_forks": 0,
+        "github_open_issues": 2,
+        "language": "PHP",
+        "dependents": 0,
+        "suggesters": 0,
+        "downloads": {
+            "total": 6,
+            "monthly": 0,
+            "daily": 0
+        },
+        "favers": 0
+    }
+}

@@ -19,14 +19,20 @@ class ListPlugins extends Command {
 
     private Cache $cache;
 
-    public function __construct(ClientInterface $client = null)
+    public function __construct(ClientInterface $client = null, $cache = null)
     {
         if (! $client) {
             $this->httpClient = new Client();
+        } else {
+            $this->httpClient = $client;
         }
 
-        $this->cache = new Cache($this->httpClient);
-        $this->cache->load(__DIR__ . '/../cache.json');
+        if (! $cache) {
+            $this->cache = new Cache($this->httpClient);
+            $this->cache->load(__DIR__ . '/../../cache.json');
+        } else {
+            $this->cache = $cache;
+        }
 
         parent::__construct();
     }
