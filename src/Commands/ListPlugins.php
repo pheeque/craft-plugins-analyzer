@@ -122,9 +122,9 @@ class ListPlugins extends Command {
             };
 
             if ($order == 'DESC') {
-                return $orderValues[0] < $orderValues[1] ? -1 : 1;
+                return $orderValues[0] < $orderValues[1] ? 1 : -1;
             } else {
-                return $orderValues[0] > $orderValues[1] ? -1 : 1;
+                return $orderValues[0] > $orderValues[1] ? 1 : -1;
             }
         });
 
