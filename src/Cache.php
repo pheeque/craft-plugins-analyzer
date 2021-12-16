@@ -42,6 +42,9 @@ class Cache {
             $data = json_decode($res->getBody(), true);
             $composerData = $data['package'];
 
+            $firstVersion = reset($composerData['versions']);
+            $time = $firstVersion['time'];
+
             $this->items[$packageName] = [
                 'name' => $composerData['name'],
                 'description' => $composerData['description'],
@@ -56,7 +59,7 @@ class Cache {
                 // 'dependents' => $composerData['dependents'],
                 'dependents' => '',
                 'favers' => $composerData['favers'],
-                'updated' => $composerData['time'],
+                'time' => $time,
             ];
         }
 

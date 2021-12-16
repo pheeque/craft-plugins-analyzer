@@ -44,7 +44,7 @@ class CraftPluginPackage implements \JsonSerializable
         $this->downloads = (int) $data['downloads'];
         $this->dependents = (int) $data['dependents'];
         $this->favers = (int) $data['favers'];
-        $this->updated = new DateTime();
+        $this->updated = new DateTime($data['time']);
     }
 
     public function jsonSerialize()
