@@ -88,12 +88,40 @@ class ListPlugins extends Command {
 
             //skip packages without a handle or abandoned
             if ($package->handle || ! $package->isAbandoned()) {
-                $packages[] = $package->toArray();
+                $packages[] = $package;
             }
         }
 
+        //order
+        $order = $input->getOption('order');
+        $orderBy = $input->getOption('orderBy');
+        usort($packages, function ($a, $b) use ($orderBy, $order) {
+            $orderValues = match($orderBy) {
+                'downloads' => [
+                    $a->downloads,
+                    $b->downloads,
+                ],
+                'favers' => [
+                    $a->favers,
+                    $b->favers,
+                ],
+                'dependents' => [
+                    $a->dependents,
+                    $b->dependents,
+                ],
+            };
+
+            if ($order == 'DESC') {
+                return $orderValues[0] < $orderValues[1];
+            } else {
+                return $orderValues[0] > $orderValues[1];
+            }
+        });
+
+        //limit option
         $packages = array_slice($packages, 0, $input->getOption('limit'));
 
+        //output option
         $outputFile = $input->getOption('output');
         if (! $outputFile) {
             $table = new Table($output);
@@ -108,7 +136,7 @@ class ListPlugins extends Command {
                 'Dependents',
                 'Favers',
                 'Updated',
-            ])->setRows($packages);
+            ])->setRows(array_map(fn (CraftPluginPackage $package) => $package->toArray(), $packages));
             $table->render();
         } else {
             //save to file
