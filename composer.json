@@ -15,8 +15,9 @@
         }
     ],
     "require": {
+        "php": ">=8.0",
         "guzzlehttp/guzzle": "^7.4",
-        "symfony/console": "^6.0"
+        "symfony/console": "^5.4"
     },
     "bin": [
         "bin/craft-plugins-analyzer"
