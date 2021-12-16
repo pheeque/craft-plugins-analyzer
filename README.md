@@ -14,6 +14,11 @@ composer global config repositories.craft-plugins-analyzer vcs https://github.co
 composer global require pheeque/craft-plugins-analyzer:dev-master
 ```
 
+To upgrade to the most recent version, run:
+```shell
+composer global update pheeque/craft-plugins-analyzer:dev-master
+```
+
 ## Usage
 After installation, you can run this program with the following options:
 
