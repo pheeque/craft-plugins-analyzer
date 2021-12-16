@@ -29,6 +29,9 @@ Options:
   -h, --help             Display help for the list-plugins command
 ```
 
+## Caching
+The first run of the program takes a while as it attempts to populate the cache with package data from packagist. Subsequent runs should be much faster. 
+
 ## Testing
 Tests can be run from the root of this repo as follows:
 ```shell
