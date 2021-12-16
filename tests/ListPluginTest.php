@@ -22,8 +22,8 @@ test('executes command', function () {
             ])
         ),
     ]);
-    $cache = new Cache($httpClient);
-    $cache->load(__DIR__ . '/../test-cache.json');
+    $cache = new Cache($httpClient, false);
+    $cache->load('tests/fixtures/test-cache.json');
 
     $command = new ListPlugins($httpClient, $cache);
     $application->add($command);

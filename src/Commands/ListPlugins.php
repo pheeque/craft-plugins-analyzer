@@ -19,10 +19,14 @@ class ListPlugins extends Command {
 
     private Cache $cache;
 
-    public function __construct(ClientInterface $client = null, $cache = null)
+    public function __construct(ClientInterface $client = null, Cache $cache = null)
     {
         if (! $client) {
-            $this->httpClient = new Client();
+            $this->httpClient = new Client([
+                'headers' => [
+                    'User-Agent' => 'CraftPluginsAnalayzerBot/0.1 (+https://github.com/pheeque/craft-plugins-analyzer)',
+                ],
+            ]);
         } else {
             $this->httpClient = $client;
         }
@@ -76,14 +80,19 @@ class ListPlugins extends Command {
 
         $data = json_decode($res->getBody());
 
-        $packageNames = array_slice($data->packageNames, 0, $input->getOption('limit'));
+        $packageNames = $data->packageNames;
         $packages = [];
         foreach ($packageNames as $name) {
             $package = new CraftPluginPackage($name);
             $package->hydrate($this->cache);
 
-            $packages[] = $package->toArray();
+            //skip packages without a handle or abandoned
+            if ($package->handle || ! $package->isAbandoned()) {
+                $packages[] = $package->toArray();
+            }
         }
+
+        $packages = array_slice($packages, 0, $input->getOption('limit'));
 
         $outputFile = $input->getOption('output');
         if (! $outputFile) {

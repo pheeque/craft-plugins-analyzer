@@ -6,15 +6,14 @@ use GuzzleHttp\ClientInterface;
 
 class Cache {
 
-    private ClientInterface $httpClient;
-
     private array $items;
 
     private string $cacheFilename;
 
-
-    public function __construct(ClientInterface $client)
-    {
+    public function __construct(
+        private ClientInterface $client,
+        private bool $persist = true
+    ) {
         $this->httpClient = $client;
 
         $this->items = [];
@@ -31,7 +30,9 @@ class Cache {
 
     public function save()
     {
-        file_put_contents($this->cacheFilename, json_encode($this->items));
+        if ($this->persist) {
+            file_put_contents($this->cacheFilename, json_encode($this->items));
+        }
     }
 
     public function get(string $packageName) : array
@@ -45,21 +46,31 @@ class Cache {
             $firstVersion = reset($composerData['versions']);
             $time = $firstVersion['time'];
 
+            $handle = '';
+            if (isset($firstVersion['extra']['handle'])) {
+                $handle = $firstVersion['extra']['handle'];
+            }
+
+            //TODO: confirm if time supersedes order in versions array
+            // $versions = array_map(fn ($version) => [
+            //     'version' => $version['version'],
+            //     'time' => $version['time'],
+            // ], array_values($composerData['versions']));
+
             $this->items[$packageName] = [
                 'name' => $composerData['name'],
                 'description' => $composerData['description'],
-                // 'handle' => $composerData['handle'],
-                'handle' => '',
+                'handle' => $handle,
                 'repository' => $composerData['repository'],
                 // 'testLibrary' => $composerData['testLibrary'],
                 'testLibrary' => '',
-                // 'version' => $composerData['version'],
+                'version' => $firstVersion['version'],
                 'version' => '',
                 'downloads' => $composerData['downloads']['total'],
-                // 'dependents' => $composerData['dependents'],
-                'dependents' => '',
+                'dependents' => $composerData['dependents'],
                 'favers' => $composerData['favers'],
                 'time' => $time,
+                'abandoned' => isset($composerData['abandoned']) && $composerData['abandoned'] != 'false' ? true : false,
             ];
         }
 

@@ -17,9 +17,12 @@ class CraftPluginPackage implements \JsonSerializable
     public int $favers;
     public DateTime $updated;
 
+    private bool $abandoned;
+
     public function __construct(string $name)
     {
         $this->name = $name;
+        $this->abandoned = false;
 
         $this->description = '';
         $this->handle = '';
@@ -36,6 +39,8 @@ class CraftPluginPackage implements \JsonSerializable
     {
         $data = $cache->get($this->name);
 
+        $this->abandoned = $data['abandoned'];
+
         $this->description = $data['description'];
         $this->handle = $data['handle'];
         $this->repository = $data['repository'];
@@ -45,6 +50,11 @@ class CraftPluginPackage implements \JsonSerializable
         $this->dependents = (int) $data['dependents'];
         $this->favers = (int) $data['favers'];
         $this->updated = new DateTime($data['time']);
+    }
+
+    public function isAbandoned()
+    {
+        return $this->abandoned;
     }
 
     public function jsonSerialize()
