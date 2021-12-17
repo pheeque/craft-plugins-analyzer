@@ -3,8 +3,12 @@
 namespace Pheeque\CraftPluginsAnalyzer;
 
 use GuzzleHttp\ClientInterface;
+use Pheeque\CraftPluginsAnalyzer\Contracts\CacheInterface;
+use Pheeque\CraftPluginsAnalyzer\Traits\InteractsWithPackagist;
 
-class Cache {
+class Cache implements CacheInterface {
+
+    use InteractsWithPackagist;
 
     /**
      * @var int
@@ -89,13 +93,11 @@ class Cache {
     public function get(string $packageName) : array
     {
         if (! isset($this->items[$packageName])) {
-            //fetch data remotely
-            $res = $this->httpClient->request('GET', 'https://packagist.org/packages/' . $packageName . '.json');
-            $data = json_decode($res->getBody(), true);
+            $data = $this->getPackageData($this->httpClient, $packageName);
+
             $composerData = $data['package'];
 
             $firstVersion = reset($composerData['versions']);
-            $time = $firstVersion['time'];
 
             $handle = '';
             if (isset($firstVersion['extra']['handle'])) {
@@ -113,7 +115,7 @@ class Cache {
                 'downloads' => $composerData['downloads']['total'],
                 'dependents' => $composerData['dependents'],
                 'favers' => $composerData['favers'],
-                'time' => $time,
+                'time' => $firstVersion['time'],
                 'abandoned' => isset($composerData['abandoned']) && $composerData['abandoned'] != 'false' ? true : false,
             ];
         }
@@ -128,8 +130,7 @@ class Cache {
      */
     public function validateCacheData() : void
     {
-        $res = $this->httpClient->request('GET', 'https://packagist.org/metadata/changes.json?since=' . $this->lastChecked);
-        $data = json_decode($res->getBody(), true);
+        $data = $this->getModifiedPackages($this->httpClient, $this->lastChecked);
 
         foreach($data['actions'] as $action) {
             if (isset($this->items[$action['package']])) {
