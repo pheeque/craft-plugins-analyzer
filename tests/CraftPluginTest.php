@@ -35,3 +35,21 @@ it('hydrates plugin from cache', function () {
         "2020-02-10 13:45:30",
     ]);
 });
+
+it('can retrieve testlibrary information', function () {
+    $httpClient = new Client([
+        'handler' => HandlerStack::create(
+            new MockHandler([
+                new Response(200, [],
+                    file_get_contents('tests/fixtures/packages/craft-avatax.json')),
+            ])
+        ),
+    ]);
+
+    $cache = new Cache($httpClient, false);
+
+    $package = new CraftPluginPackage('abyrath/craft-avatax');
+    $package->hydrate($cache);
+
+    expect($package->testLibrary)->toEqual('phpunit/phpunit');
+});

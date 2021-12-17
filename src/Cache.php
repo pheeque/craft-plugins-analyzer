@@ -109,14 +109,17 @@ class Cache implements CacheInterface {
                 'description' => $composerData['description'],
                 'handle' => $handle,
                 'repository' => $composerData['repository'],
-                // 'testLibrary' => $composerData['testLibrary'],
-                'testLibrary' => '',
+                'testLibrary' => $this->getTestLibrary($firstVersion),
                 'version' => $firstVersion['version'],
                 'downloads' => $composerData['downloads']['total'],
                 'dependents' => $composerData['dependents'],
                 'favers' => $composerData['favers'],
                 'time' => $firstVersion['time'],
                 'abandoned' => isset($composerData['abandoned']) && $composerData['abandoned'] != 'false' ? true : false,
+                'require' => isset($firstVersion['require']) ?
+                    $firstVersion['require'] : [],
+                'require-dev' => isset($firstVersion['require-dev']) ?
+                    $firstVersion['require-dev'] : [],
             ];
         }
 

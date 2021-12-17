@@ -88,7 +88,7 @@ class ListPlugins extends Command {
                 'orderBy',
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Field to sort results by, allowed values: downloads, favers, dependents, updated ',
+                'Field to sort results by, allowed values: downloads, favers, dependents, testLibrary, updated',
                 'downloads'
             )
             ->addOption(
@@ -152,6 +152,10 @@ class ListPlugins extends Command {
                 'dependents' => [
                     $a->dependents,
                     $b->dependents,
+                ],
+                'testLibrary' => [
+                    $a->testLibrary,
+                    $b->testLibrary,
                 ],
             };
 

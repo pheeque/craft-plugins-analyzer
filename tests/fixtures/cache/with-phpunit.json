@@ -1,0 +1,22 @@
+{
+    "items": {
+        "24hoursmedia-craftcms\/twig-works-image": {
+            "name": "24hoursmedia-craftcms\/twig-works-image",
+            "description": "Twig image transforms for CraftCMS 3.",
+            "handle": "twig-works-image",
+            "repository": "https:\/\/github.com\/24hoursmedia-craftcms\/twig-works-image",
+            "testLibrary": "phpunit/phpunit",
+            "version": "dev-master",
+            "downloads": 6,
+            "dependents": 0,
+            "favers": 0,
+            "time": "2018-03-27T07:24:38+00:00",
+            "abandoned": false,
+            "require": {
+                "craftcms\/cms": "^3.0.0-RC1"
+            },
+            "require_dev": []
+        }
+    },
+    "lastChecked": 16397192200000
+}
