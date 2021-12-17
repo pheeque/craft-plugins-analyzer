@@ -6,12 +6,27 @@ use GuzzleHttp\ClientInterface;
 
 class Cache {
 
+    /**
+     * @var int
+     */
     private int $lastChecked;
 
+    /**
+     * @var array
+     */
     private array $items;
 
+    /**
+     * @var string
+     */
     private string $cacheFilename;
 
+    /**
+     * @param GuzzleHttp\ClientInterface $client
+     * @param bool $persist Whether to save the cache to file
+     *
+     * @return void
+     */
     public function __construct(
         private ClientInterface $client,
         private bool $persist = true
@@ -23,6 +38,13 @@ class Cache {
         $this->lastChecked = 10000 * time();
     }
 
+    /**
+     * Load the cache data from a provided filename
+     *
+     * @param string $filename
+     *
+     * @return void
+     */
     public function load(string $filename) : void
     {
         $this->cacheFilename = $filename;
@@ -41,7 +63,12 @@ class Cache {
         }
     }
 
-    public function save()
+    /**
+     * Save the cache to file
+     *
+     * @return void
+     */
+    public function save() : void
     {
         if ($this->persist) {
             file_put_contents($this->cacheFilename, json_encode([
@@ -51,6 +78,14 @@ class Cache {
         }
     }
 
+    /**
+     * Retrieves package data from the cache
+     * Fetches from remote server if package not present in cache or invalidated
+     *
+     * @param string $packageName
+     *
+     * @return array
+     */
     public function get(string $packageName) : array
     {
         if (! isset($this->items[$packageName])) {
@@ -66,12 +101,6 @@ class Cache {
             if (isset($firstVersion['extra']['handle'])) {
                 $handle = $firstVersion['extra']['handle'];
             }
-
-            //TODO: confirm if time supersedes order in versions array
-            // $versions = array_map(fn ($version) => [
-            //     'version' => $version['version'],
-            //     'time' => $version['time'],
-            // ], array_values($composerData['versions']));
 
             $this->items[$packageName] = [
                 'name' => $composerData['name'],
@@ -93,9 +122,11 @@ class Cache {
     }
 
     /**
-     * Confirms from packagist what cached packages have updates.
+     * Confirms from packagist what cached packages to invalidate
+     *
+     * @return void
      */
-    public function validateCacheData()
+    public function validateCacheData() : void
     {
         $res = $this->httpClient->request('GET', 'https://packagist.org/metadata/changes.json?since=' . $this->lastChecked);
         $data = json_decode($res->getBody(), true);
@@ -109,6 +140,9 @@ class Cache {
         $this->lastChecked = 10000 * time();
     }
 
+    /**
+     * Automatically saves the cache to file regardless of how the program is stopped
+     */
     public function __destruct()
     {
         $this->save();

@@ -13,13 +13,33 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * list-plugins command class
+ * Displays all Craft plugins from packagist
+ *
+ */
 class ListPlugins extends Command {
+    /**
+     * @var string
+     */
     protected static $defaultName = 'list-plugins';
 
+    /**
+     * @var ClientInterface
+     */
     private ClientInterface $httpClient;
 
+    /**
+     * @var Cache
+     */
     private Cache $cache;
 
+    /**
+     * Command constructor
+     *
+     * @param ClientInterface|null $client
+     * @param Cache|null $cache
+     */
     public function __construct(ClientInterface $client = null, Cache $cache = null)
     {
         if (! $client) {
@@ -42,6 +62,11 @@ class ListPlugins extends Command {
         parent::__construct();
     }
 
+    /**
+     * Set options/help for this command
+     *
+     * @return void
+     */
     protected function configure() : void
     {
         $this
@@ -75,6 +100,15 @@ class ListPlugins extends Command {
             );
     }
 
+
+    /**
+     * Run this command
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     *
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $progressBar = new ProgressBar($output, 50);

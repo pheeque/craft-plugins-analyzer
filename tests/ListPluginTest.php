@@ -19,6 +19,8 @@ test('executes command', function () {
                     file_get_contents('tests/fixtures/package-names.json')),
                 new Response(200, [],
                     file_get_contents('tests/fixtures/package-data-with-stats.json')),
+                new Response(200, [],
+                    file_get_contents('tests/fixtures/packages/craft-avatax.json')),
             ])
         ),
     ]);

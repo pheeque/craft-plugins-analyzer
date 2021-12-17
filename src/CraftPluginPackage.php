@@ -6,19 +6,66 @@ use DateTime;
 
 class CraftPluginPackage implements \JsonSerializable
 {
+    /**
+     * @var string
+     */
     public string $name;
+
+    /**
+     * @var string|null
+     */
     public ?string $description;
+
+    /**
+     * @var string
+     */
     public string $handle; // versions[0].extra.handle attribute
+
+    /**
+     * @var string
+     */
     public string $repository;
+
+    /**
+     * @var string|null
+     */
     public ?string $testLibrary;
+
+    /**
+     * @var string
+     */
     public string $version; // most recent branch
+
+    /**
+     * @var int
+     */
     public int $downloads; // downloads.monthly
+
+    /**
+     * @var int
+     */
     public int $dependents;
+
+    /**
+     * @var int
+     */
     public int $favers;
+
+    /**
+     * @var DateTime
+     */
     public DateTime $updated;
 
+    /**
+     * @var bool
+     */
     private bool $abandoned;
 
+    /**
+     * Package constructor
+     *
+     * @param string $name
+     */
     public function __construct(string $name)
     {
         $this->name = $name;
@@ -35,7 +82,14 @@ class CraftPluginPackage implements \JsonSerializable
         $this->updated = new DateTime();
     }
 
-    public function hydrate(Cache $cache)
+    /**
+     * Fetch package data from the cache
+     *
+     * @param Cache $cache
+     *
+     * @return void
+     */
+    public function hydrate(Cache $cache) : void
     {
         $data = $cache->get($this->name);
 
@@ -52,12 +106,32 @@ class CraftPluginPackage implements \JsonSerializable
         $this->updated = new DateTime($data['time']);
     }
 
-    public function isAbandoned()
+    /**
+     * Determines if the package is abandoned or moved on packagist
+     *
+     * @return bool
+     */
+    public function isAbandoned() : bool
     {
         return $this->abandoned;
     }
 
-    public function jsonSerialize()
+    /**
+     * Make package json serializable
+     *
+     * @return array
+     */
+    public function jsonSerialize() : array
+    {
+        return $this->toArray();
+    }
+
+    /**
+     * Returns plugin object as array
+     *
+     * @return array
+     */
+    public function toArray() : array
     {
         return [
             $this->name,
@@ -71,10 +145,5 @@ class CraftPluginPackage implements \JsonSerializable
             $this->favers,
             $this->updated->format('Y-m-d H:i:s'),
         ];
-    }
-
-    public function toArray()
-    {
-        return $this->jsonSerialize();
     }
 }
