@@ -3,6 +3,7 @@
 namespace Pheeque\CraftPluginsAnalyzer\Traits;
 
 use GuzzleHttp\ClientInterface;
+use stdClass;
 
 trait InteractsWithPackagist {
     /**
@@ -65,4 +66,9 @@ trait InteractsWithPackagist {
         return $testLibrary;
     }
 
+    public function getCraftPlugins(ClientInterface $httpClient) : stdClass
+    {
+        $res = $httpClient->request('GET', 'https://packagist.org/packages/list.json?type=craft-plugin');
+        return json_decode($res->getBody());
+    }
 }

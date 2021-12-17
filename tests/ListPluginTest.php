@@ -4,8 +4,8 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use Pheeque\CraftPluginsAnalyzer\Cache;
 use Pheeque\CraftPluginsAnalyzer\Commands\ListPlugins;
+use Pheeque\CraftPluginsAnalyzer\FileCache;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -24,8 +24,7 @@ test('executes command', function () {
             ])
         ),
     ]);
-    $cache = new Cache($httpClient, false);
-    $cache->load('tests/fixtures/test-cache.json');
+    $cache = new FileCache($httpClient);
 
     $command = new ListPlugins($httpClient, $cache);
     $application->add($command);

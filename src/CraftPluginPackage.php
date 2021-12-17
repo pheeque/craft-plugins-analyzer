@@ -3,6 +3,7 @@
 namespace Pheeque\CraftPluginsAnalyzer;
 
 use DateTime;
+use Pheeque\CraftPluginsAnalyzer\Contracts\CacheInterface;
 
 class CraftPluginPackage implements \JsonSerializable
 {
@@ -85,11 +86,11 @@ class CraftPluginPackage implements \JsonSerializable
     /**
      * Fetch package data from the cache
      *
-     * @param Cache $cache
+     * @param CacheInterface $cache
      *
      * @return void
      */
-    public function hydrate(Cache $cache) : void
+    public function hydrate(CacheInterface $cache) : void
     {
         $data = $cache->get($this->name);
 

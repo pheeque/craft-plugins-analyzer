@@ -6,7 +6,7 @@ use GuzzleHttp\ClientInterface;
 use Pheeque\CraftPluginsAnalyzer\Contracts\CacheInterface;
 use Pheeque\CraftPluginsAnalyzer\Traits\InteractsWithPackagist;
 
-class Cache implements CacheInterface {
+class FileCache implements CacheInterface {
 
     use InteractsWithPackagist;
 
@@ -21,38 +21,33 @@ class Cache implements CacheInterface {
     private array $items;
 
     /**
-     * @var string
-     */
-    private string $cacheFilename;
-
-    /**
      * @param GuzzleHttp\ClientInterface $client
-     * @param bool $persist Whether to save the cache to file
+     * @param string|null $cacheFilename filename of the cache in storage
      *
      * @return void
      */
     public function __construct(
         private ClientInterface $client,
-        private bool $persist = true
+        private ?string $cacheFilename = NULL
     ) {
         $this->httpClient = $client;
 
         $this->items = [];
 
         $this->lastChecked = 10000 * time();
+
+        if ($this->cacheFilename) {
+            $this->load();
+        }
     }
 
     /**
      * Load the cache data from a provided filename
      *
-     * @param string $filename
-     *
      * @return void
      */
-    public function load(string $filename) : void
+    public function load() : void
     {
-        $this->cacheFilename = $filename;
-
         if (file_exists($this->cacheFilename)) {
             $data = json_decode(file_get_contents($this->cacheFilename), true);
 
@@ -74,7 +69,7 @@ class Cache implements CacheInterface {
      */
     public function save() : void
     {
-        if ($this->persist) {
+        if ($this->cacheFilename) {
             file_put_contents($this->cacheFilename, json_encode([
                 'items' => $this->items,
                 'lastChecked' => $this->lastChecked,

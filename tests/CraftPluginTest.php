@@ -4,8 +4,8 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use Pheeque\CraftPluginsAnalyzer\Cache;
 use Pheeque\CraftPluginsAnalyzer\CraftPluginPackage;
+use Pheeque\CraftPluginsAnalyzer\FileCache;
 
 it('hydrates plugin from cache', function () {
     $httpClient = new Client([
@@ -17,7 +17,7 @@ it('hydrates plugin from cache', function () {
         ),
     ]);
 
-    $cache = new Cache($httpClient, false);
+    $cache = new FileCache($httpClient);
 
     $package = new CraftPluginPackage('abryrath/craft-avatax');
     $package->hydrate($cache);
@@ -27,7 +27,7 @@ it('hydrates plugin from cache', function () {
         "Calculate and add sales tax to an order's base tax using Avalara's Avatax service.",
         "avatax",
         "https://github.com/abryrath/craft-avatax",
-        "",
+        "phpunit/phpunit",
         "dev-master",
         5,
         0,
@@ -46,7 +46,7 @@ it('can retrieve testlibrary information', function () {
         ),
     ]);
 
-    $cache = new Cache($httpClient, false);
+    $cache = new FileCache($httpClient);
 
     $package = new CraftPluginPackage('abyrath/craft-avatax');
     $package->hydrate($cache);
