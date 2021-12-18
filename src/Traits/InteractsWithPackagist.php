@@ -3,6 +3,7 @@
 namespace Pheeque\CraftPluginsAnalyzer\Traits;
 
 use GuzzleHttp\ClientInterface;
+use Illuminate\Support\Collection;
 use stdClass;
 
 trait InteractsWithPackagist {
@@ -35,7 +36,7 @@ trait InteractsWithPackagist {
      */
     private function getTestLibrary(array $versionData) : ?string
     {
-        $testLibraries = [
+        $testLibraries = new Collection([
             'phpunit/phpunit',
             'behat/behat',
             'pestphp/pest',
@@ -43,23 +44,19 @@ trait InteractsWithPackagist {
             'behat/mink',
             'symfony/panther',
             'phpstan/phpstan',
-        ];
+        ]);
         $testLibrary = '';
         if (isset($versionData['require'])) {
-            $found = array_intersect($testLibraries, array_keys($versionData['require']));
-            $found = reset($found);
-            if ($found) {
-                $testLibrary = $found;
-            }
+            $testLibrary = $testLibraries->intersect(
+                array_keys($versionData['require'])
+            )->first();
         }
 
         if (! $testLibrary) {
             if (isset($versionData['require-dev'])) {
-                $found = array_intersect($testLibraries, array_keys($versionData['require-dev']));
-                $found = reset($found);
-                if ($found) {
-                    $testLibrary = $found;
-                }
+                $testLibrary = $testLibraries->intersect(
+                    array_keys($versionData['require-dev'])
+                )->first();
             }
         }
 

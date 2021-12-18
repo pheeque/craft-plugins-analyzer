@@ -3,6 +3,7 @@
 namespace Pheeque\CraftPluginsAnalyzer\Analyzers;
 
 use GuzzleHttp\ClientInterface;
+use Illuminate\Support\Collection;
 use Pheeque\CraftPluginsAnalyzer\Analyzer;
 use Pheeque\CraftPluginsAnalyzer\Contracts\CacheInterface;
 use Pheeque\CraftPluginsAnalyzer\CraftPluginPackage;
@@ -20,56 +21,43 @@ class ListPlugins extends Analyzer {
         private string $order = 'DESC',
     ) {}
 
+    /**
+     * Run this analyzer
+     * A progress update callable is passed in to update the caller of progress
+     * during long-running operations.
+     *
+     * @param callable $onProgressUpdate
+     *
+     * @return array
+     */
     public function run(callable $onProgressUpdate) : array
     {
         $data = $this->getCraftPlugins($this->httpClient);
 
         $packageNames = $data->packageNames;
 
-        $packages = [];
+        $packages = new Collection();
         foreach ($packageNames as $name) {
             $package = new CraftPluginPackage($name);
             $package->hydrate($this->cache);
 
             //skip packages without a handle or abandoned
             if ($package->handle || ! $package->isAbandoned()) {
-                $packages[] = $package;
+                $packages->push($package);
             }
 
             $onProgressUpdate(count($packageNames));
         }
 
-        //order
-        usort($packages, function ($a, $b) {
-            $orderValues = match($this->orderBy) {
-                'downloads' => [
-                    $a->downloads,
-                    $b->downloads,
-                ],
-                'favers' => [
-                    $a->favers,
-                    $b->favers,
-                ],
-                'dependents' => [
-                    $a->dependents,
-                    $b->dependents,
-                ],
-                'testLibrary' => [
-                    $a->testLibrary,
-                    $b->testLibrary,
-                ],
-            };
+        if ($this->order == 'DESC') {
+            $sorted = $packages->sortByDesc($this->orderBy);
+        } else {
+            $sorted = $packages->sortBy($this->orderBy);
+        }
 
-            if ($this->order == 'DESC') {
-                return $orderValues[0] < $orderValues[1] ? 1 : -1;
-            } else {
-                return $orderValues[0] > $orderValues[1] ? 1 : -1;
-            }
-        });
-
-        //limit option
-        $packages = array_slice($packages, 0, $this->limit);
-
-        return array_map(fn (CraftPluginPackage $package) => $package->toArray(), $packages);
+        return $sorted
+                    ->slice(0, $this->limit)
+                    ->map(fn (CraftPluginPackage $package) => $package->toArray())
+                    ->toArray();
     }
 }
