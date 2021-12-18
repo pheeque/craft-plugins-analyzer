@@ -34,20 +34,16 @@ class ListPlugins extends Analyzer {
     {
         $data = $this->getCraftPlugins($this->httpClient);
 
-        $packageNames = $data->packageNames;
+        $packageNames = new Collection($data->packageNames);
+        $count = $packageNames->count();
+        $packages = $packageNames->map(function ($name) use ($onProgressUpdate, $count) {
+            $onProgressUpdate($count);
 
-        $packages = new Collection();
-        foreach ($packageNames as $name) {
             $package = new CraftPluginPackage($name);
             $package->hydrate($this->cache);
 
-            //skip packages without a handle or abandoned
-            if ($package->handle || ! $package->isAbandoned()) {
-                $packages->push($package);
-            }
-
-            $onProgressUpdate(count($packageNames));
-        }
+            return $package;
+        })->filter(fn ($package) => $package->handle || ! $package->isAbandoned());
 
         if ($this->order == 'DESC') {
             $sorted = $packages->sortByDesc($this->orderBy);
