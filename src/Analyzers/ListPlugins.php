@@ -43,7 +43,7 @@ class ListPlugins extends Analyzer {
             $package->hydrate($this->cache);
 
             return $package;
-        })->filter(fn ($package) => $package->handle || ! $package->isAbandoned());
+        })->filter(fn ($package) => $package->handle && ! $package->isAbandoned());
 
         if ($this->order == 'DESC') {
             $sorted = $packages->sortByDesc($this->orderBy);
