@@ -42,42 +42,6 @@ class FileCache implements CacheInterface {
     }
 
     /**
-     * Load the cache data from a provided filename
-     *
-     * @return void
-     */
-    public function load() : void
-    {
-        if (file_exists($this->cacheFilename)) {
-            $data = json_decode(file_get_contents($this->cacheFilename), true);
-
-            if (isset($data['items'])) {
-                $this->items = $data['items'];
-            }
-            if (isset($data['lastChecked'])) {
-                $this->lastChecked = $data['lastChecked'];
-            }
-
-            $this->validateCacheData();
-        }
-    }
-
-    /**
-     * Save the cache to file
-     *
-     * @return void
-     */
-    public function save() : void
-    {
-        if ($this->cacheFilename) {
-            file_put_contents($this->cacheFilename, json_encode([
-                'items' => $this->items,
-                'lastChecked' => $this->lastChecked,
-            ]));
-        }
-    }
-
-    /**
      * Retrieves package data from the cache
      * Fetches from remote server if package not present in cache or invalidated
      *
@@ -122,11 +86,47 @@ class FileCache implements CacheInterface {
     }
 
     /**
+     * Load the cache data from a provided filename
+     *
+     * @return void
+     */
+    private function load() : void
+    {
+        if (file_exists($this->cacheFilename)) {
+            $data = json_decode(file_get_contents($this->cacheFilename), true);
+
+            if (isset($data['items'])) {
+                $this->items = $data['items'];
+            }
+            if (isset($data['lastChecked'])) {
+                $this->lastChecked = $data['lastChecked'];
+            }
+
+            $this->validateCacheData();
+        }
+    }
+
+    /**
+     * Save the cache to file
+     *
+     * @return void
+     */
+    private function save() : void
+    {
+        if ($this->cacheFilename) {
+            file_put_contents($this->cacheFilename, json_encode([
+                'items' => $this->items,
+                'lastChecked' => $this->lastChecked,
+            ]));
+        }
+    }
+
+    /**
      * Confirms from packagist what cached packages to invalidate
      *
      * @return void
      */
-    public function validateCacheData() : void
+    private function validateCacheData() : void
     {
         $data = $this->getModifiedPackages($this->httpClient, $this->lastChecked);
 
